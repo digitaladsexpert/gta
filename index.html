@@ -134,14 +134,9 @@ function updateProgress(pct){
 /* ---------- PIXEL TRACKING WRAPPER ---------- */
 function sendSubscribe(eventName, payload){
   try{ fbq('track', eventName, payload || {}); }catch(e){}
-  // optionally send to your server for verification:
-  // navigator.sendBeacon('/api/track', JSON.stringify({event:eventName, payload}));
 }
 
-/* ---------- BASIC CLIENT BOT CHECK ----------
-   This is a lightweight check: requires a human click on "Proceed"
-   Replace/upgrade with Cloudflare Turnstile / hCaptcha for stronger protection.
--------------------------------------------*/
+/* ---------- BASIC CLIENT BOT CHECK ---------- */
 function onChooseSingle(ev){
   if(answered) return;
   answered = true;
@@ -175,7 +170,7 @@ function showConfirmFor(val){
         <div class="thank-sub">We share guides, sample setups and educational posts in the resource page.</div>
         <div class="row">
           <button id="backBtn" class="btn-ghost">Back</button>
-          <a id="learnBtn" class="join-btn" href="${telegramLink}" target="_blank" rel="noopener">See Resources →</a>
+          <a id="learnBtn" class="join-btn" href="\${telegramLink}" target="_blank" rel="noopener">See Resources →</a>
         </div>
         <div class="note">You can always come back and request signals later.</div>
       </div>
@@ -188,16 +183,16 @@ function showConfirmFor(val){
 }
 
 function onProceedClickYes(){
-  // Instead of direct join, open the server-side redirect which logs clicks.
   sendSubscribe('ProceedClick', {interested:'yes'});
-  const win = window.open('/go/redirect.html?to=telegram', '_blank', 'noopener');
-  if(!win){ window.location.href = '/go/redirect.html?to=telegram'; }
+  const redirectUrl = window.location.origin + '/redirect.html?to=telegram';
+  const win = window.open(redirectUrl, '_blank', 'noopener');
+  if(!win){ window.location.href = redirectUrl; }
   qBox.innerHTML = `
     <div class="thankyou">
       <div class="hype small">Done — check your Telegram</div>
       <div class="thank-sub">If Telegram didn't open, tap the button again.</div>
       <div class="row" style="margin-top:12px">
-        <a class="join-btn" href="/go/redirect.html?to=telegram" target="_blank" rel="noopener">Open Telegram →</a>
+        <a class="join-btn" href="/redirect.html?to=telegram" target="_blank" rel="noopener">Open Telegram →</a>
       </div>
       <div class="note">Educational content only. No guarantees of profit.</div>
     </div>

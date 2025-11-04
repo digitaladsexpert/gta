@@ -22,15 +22,10 @@
 
 <script>
 (function(){
-  // Map short names to real external links
-  const map = {
-    telegram: "https://telegram.me/+ZVpxPGfP6LFiZDFl"
-  };
-  // Basic logging call - replace with your server endpoint if available
+  const map = { telegram: "https://telegram.me/+ZVpxPGfP6LFiZDFl" };
   function logClick(params){
     try{
-      // Use navigator.sendBeacon when possible
-      const url = '/.netlify/functions/logClick'; // placeholder if you add a Netlify function
+      const url = '/.netlify/functions/logClick';
       const payload = JSON.stringify({ts:Date.now(), params:params, ua:navigator.userAgent});
       if(navigator.sendBeacon){
         navigator.sendBeacon(url, payload);
@@ -39,14 +34,12 @@
       }
     }catch(e){}
   }
-
   const qs = new URLSearchParams(location.search);
   const to = qs.get('to') || 'telegram';
   const dest = map[to] || map['telegram'];
   const direct = document.getElementById('direct');
   direct.setAttribute('href', dest);
 
-  // Log and redirect after a small delay to discourage bots
   logClick({to:to, ref:document.referrer});
   setTimeout(()=>{ window.location.replace(dest); }, 1200);
 })();
